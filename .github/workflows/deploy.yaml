@@ -1,0 +1,33 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+    deploy_to_server:
+      description: 'Actually deploy to the server?'
+      required: true
+      type: boolean
+      default: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: bash-sample
+          path: ./deploy
+
+      - name: Unzip artifact
+        run: |
+          cd deploy
+          unzip release.zip
+
+      - name: Deploy to server
+	      if: ${{ github.event.inputs.deploy_to_server == 'true' }}
+        env:
+          SERVER: ${{ secrets.DEPLOY_SERVER }}
+        run: |
+          echo "Simulating deploy to $SERVER"
+          # Here you could scp main.sh $SERVER:/path/to/bin/
