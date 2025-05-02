@@ -25,7 +25,7 @@ jobs:
           unzip release.zip
 
       - name: Deploy to server
-	      if: ${{ github.event.inputs.deploy_to_server == 'true' }}
+        if: ${{ github.event.inputs.deploy_to_server == 'true' }}
         env:
           SERVER: ${{ secrets.DEPLOY_SERVER }}
         run: |
