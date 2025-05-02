@@ -5,6 +5,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+    deploy_to_server:
+      description: 'Actually deploy to the server?'
+      required: true
+      type: boolean
+      default: false
 
 jobs:
   build:

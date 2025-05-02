@@ -2,22 +2,20 @@ name: Deploy
 
 on:
   workflow_dispatch:
-    inputs:
-    deploy_to_server:
-      description: 'Actually deploy to the server?'
-      required: true
-      type: boolean
-      default: false
+    workflows: ["CI"]
+    types: [completed]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: bash-sample
           path: ./deploy
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Unzip artifact
         run: |
