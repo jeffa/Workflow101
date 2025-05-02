@@ -7,11 +7,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
     inputs:
-    deploy_to_server:
-      description: 'Actually deploy to the server?'
-      required: true
-      type: boolean
-      default: false
+      deploy_to_server:
+        description: 'Actually deploy to the server?'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build:
