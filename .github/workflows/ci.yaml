@@ -13,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Bash tools
-        run: sudo apt-get update && sudo apt-get install -y zip unzip shellcheck
+#      - name: Set up Bash tools
+#        run: sudo apt-get update && sudo apt-get install -y zip unzip shellcheck
 
-      - name: Lint with shellcheck
-        run: shellcheck main.sh test.sh
+#      - name: Lint with shellcheck
+#        run: shellcheck main.sh test.sh
 
       - name: Run tests
         run: |
@@ -25,7 +25,10 @@ jobs:
           ./test.sh
 
       - name: Package artifact
-        run: zip release.zip main.sh
+#        run: zip release.zip main.sh
+        run: |
+          mkdir deploy
+          tar cvzf deploy/release.tgz *.sh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

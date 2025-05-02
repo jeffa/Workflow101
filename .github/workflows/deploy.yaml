@@ -22,7 +22,7 @@ jobs:
       - name: Unzip artifact
         run: |
           cd deploy
-          unzip release.zip
+          tar xvzf release.tgz
 
       - name: Deploy to server
         if: ${{ github.event.inputs.deploy_to_server == 'true' }}
