@@ -60,4 +60,4 @@ jobs:
         env:
           SERVER: ${{ secrets.DEPLOY_SERVER }}
         run: |
-          scp main.sh $SERVER:/some/path/
+          #scp main.sh $SERVER:/some/path/
