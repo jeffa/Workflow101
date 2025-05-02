@@ -4,11 +4,14 @@ on:
   workflow_run:
     workflows: ["CI"]
     types: [completed]
+  permissions:
+    contents: read
+    actions: read
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -23,7 +26,7 @@ jobs:
           unzip release.zip
 
       - name: Deploy to server
-        if: ${{ github.event.inputs.deploy_to_server == 'true' }}
+        if: ${{ github.event.workflow_run.event_inputs.deploy_to_server == 'true' }}
         env:
           SERVER: ${{ secrets.DEPLOY_SERVER }}
         run: |
