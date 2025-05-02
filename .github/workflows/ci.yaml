@@ -1,4 +1,4 @@
-name: CI
+name: CI & Deploy
 
 on:
   push:
@@ -8,34 +8,56 @@ on:
   workflow_dispatch:
     inputs:
       deploy_to_server:
-        description: 'Actually deploy to the server?'
+        description: "Actually deploy?"
         required: true
         type: boolean
         default: false
 
+permissions:
+  contents: read     # default for checkout, shellcheck etc.
+  actions: read      # for download-artifact
+
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: checkout
         uses: actions/checkout@v4
 
-      - name: Set up Bash tools
-        run: sudo apt-get update && sudo apt-get install -y zip unzip shellcheck
-
-      - name: Lint with shellcheck
-        run: shellcheck main.sh test.sh
-
-      - name: Run tests
+      - name: build & test
         run: |
-          chmod +x test.sh
-          ./test.sh
+          sudo apt-get update && sudo apt-get install -y zip unzip shellcheck
+          shellcheck main.sh test.sh
+          chmod +x test.sh && ./test.sh
 
-      - name: Package artifact
+      - name: package
         run: zip release.zip main.sh
 
-      - name: Upload artifact
+      - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bash-sample
-          path: ./deploy/release.zip
+          path: release.zip
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_to_server == 'true' }}
+    steps:
+      - name: download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bash-sample
+          path: deploy
+
+      - name: unzip
+        run: |
+          cd deploy
+          unzip release.zip
+
+      - name: scp to server
+        env:
+          SERVER: ${{ secrets.DEPLOY_SERVER }}
+        run: |
+          scp main.sh $SERVER:/some/path/
