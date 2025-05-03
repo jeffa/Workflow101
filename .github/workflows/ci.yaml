@@ -66,4 +66,4 @@ jobs:
           echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
           mkdir -p ~/.ssh
           ssh-keyscan -H $SERVER >> ~/.ssh/known_hosts
-          scp deploy/main.sh $USER@$SERVER:$HOME/DEPLOY/
+          scp deploy/main.sh $USER@$SERVER:/home/$USER/DEPLOY/
