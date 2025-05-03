@@ -58,6 +58,12 @@ jobs:
 
       - name: scp to server
         env:
+          USER: ${{ secrets.DEPLOY_USER }}
           SERVER: ${{ secrets.DEPLOY_SERVER }}
+          PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
         run: |
-          #scp main.sh $SERVER:/some/path/
+          eval "$(ssh-agent -s)"
+          echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
+          mkdir -p ~/.ssh
+          ssh-keyscan -H $SERVER >> ~/.ssh/known_hosts
+          scp deploy/main.sh $USER@$SERVER:$HOME/DEPLOY/
