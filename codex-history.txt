@@ -1,0 +1,17 @@
+v0.0
+    I’ve added a new “release notes” action that will run on every push to main, scan your commit messages for the tags added:, updated:, and deleted:, and automatically append the matching
+    entries into a single RELEASE_NOTES.md document.
+
+    What was added:
+
+    • scripts/update_release_notes.sh – a small bash script that
+      – bootstraps RELEASE_NOTES.md (if it doesn’t exist) with “Unreleased” sections
+      – parses the commit range for any “tag: description” lines
+      – injects each matching line under the correct ### Added / ### Updated / ### Deleted header
+
+    • .github/workflows/release-notes.yml – a GitHub Actions workflow triggered on push to main that
+      – checks out the full history (fetch-depth: 0)
+      – runs the above script with the before/after SHAs
+      – commits & pushes the updated RELEASE_NOTES.md back to the repo (using the Actions token)
+
+    • RELEASE_NOTES.md – initial headings for “Unreleased” changes
