@@ -15,3 +15,9 @@ v0.0
       – commits & pushes the updated RELEASE_NOTES.md back to the repo (using the Actions token)
 
     • RELEASE_NOTES.md – initial headings for “Unreleased” changes
+v0.1
+    I’ve added a new Release Notes section to the README, detailing:
+
+        * The `.github/workflows/release-notes.yml` workflow (trigger, permissions, and step-by-step behavior).
+        * The `scripts/update_release_notes.sh` script (initialization, log parsing, entry insertion).
+        * How to use the workflow via commit-message conventions.
