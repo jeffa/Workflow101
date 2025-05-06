@@ -2,7 +2,6 @@
 
 A simple Github project that focuses on Action Workflows.
 
-
 ## Getting Started
 The GitHub Actions workflow is defined in `.github/workflows/ci.yaml`:
 - **build**: runs on pushes and pull requests to `main`, performs linting, tests, and packages `main.sh` into `release.zip`.
