@@ -1,54 +1,9 @@
-# bash-sample
+# Workflow 101
 
-A simple Bash script example that prints "Hello, <name>!" with a basic test harness and CI workflow.
+A simple Github project that focuses on Action Workflows.
 
-## Features
-- Prints `Hello, <name>!` (defaults to "World").
-- Uses strict mode (`set -euo pipefail`).
-- Includes a basic test script (`test.sh`).
-- GitHub Actions CI: linting (shellcheck), testing, packaging, and optional deployment.
-
-## Requirements
-- Bash (3.2+)
-- shellcheck (for linting)
-- zip, unzip (for packaging)
 
 ## Getting Started
-
-### Clone the repository
-```bash
-git clone <repository-url>
-cd bash-sample
-```
-
-### Make scripts executable
-```bash
-chmod +x main.sh test.sh
-```
-
-## Usage
-Run the main script:
-```bash
-./main.sh
-# Hello, World!
-
-./main.sh Alice
-# Hello, Alice!
-```
-
-## Testing
-Run the test script to verify behavior:
-```bash
-./test.sh
-```
-
-## Linting
-You can check the scripts with shellcheck:
-```bash
-shellcheck main.sh test.sh
-```
-
-## CI & Deployment
 The GitHub Actions workflow is defined in `.github/workflows/ci.yaml`:
 - **build**: runs on pushes and pull requests to `main`, performs linting, tests, and packages `main.sh` into `release.zip`.
 - **deploy**: manually triggered (`workflow_dispatch`) with `deploy_to_server=true`; downloads the artifact and copies `main.sh` to a remote server via SCP.
