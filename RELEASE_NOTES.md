@@ -4,20 +4,20 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+-  (82987d2)
 - foo
 - bar
 - baz
-### Added
--  (82987d2)
 
+### Updated
+-  (82987d2)
 - one
 - two
 - three
-### Updated
--  (82987d2)
 
+### Deleted
+-  (82987d2)
 - this
 - and
 - that
-### Deleted
--  (82987d2)
