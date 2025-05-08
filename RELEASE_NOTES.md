@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 - baz
 - bar
 - foo
+-  (3957283)
+- baz
+- bar
+- foo
 -  (57e1466)
 - baz
 - bar
@@ -22,6 +26,10 @@ All notable changes to this project will be documented in this file.
 - three
 - two
 - one
+-  (3957283)
+- three
+- two
+- one
 -  (57e1466)
 - three
 - two
@@ -33,6 +41,10 @@ All notable changes to this project will be documented in this file.
 - three
 
 ### Deleted
+- that
+- and
+- this
+-  (3957283)
 - that
 - and
 - this
