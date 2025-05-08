@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 - baz
 - bar
 - foo
+-  (57e1466)
+- baz
+- bar
+- foo
 -  (bf3ebed)
 -  (82987d2)
 - foo
@@ -18,6 +22,10 @@ All notable changes to this project will be documented in this file.
 - three
 - two
 - one
+-  (57e1466)
+- three
+- two
+- one
 -  (bf3ebed)
 -  (82987d2)
 - one
@@ -25,6 +33,10 @@ All notable changes to this project will be documented in this file.
 - three
 
 ### Deleted
+- that
+- and
+- this
+-  (57e1466)
 - that
 - and
 - this
