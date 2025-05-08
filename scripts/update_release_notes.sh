@@ -26,23 +26,62 @@ All notable changes to this project will be documented in this file.
 EOF
 fi
 
-# Scan commit messages for tags and insert entries
-# git log --format:  hash<NUL>body<NUL> for each commit
 git --no-pager log --format=$'%h%x00%B%x00' "$before..$after" |
 while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
-  # now $hash is the short SHA
-  #    $body is the full commit message (possibly multi‐line)
+  in_tag=""        # holds “added” or “updated” or “deleted” once we see it
+  block=""         # accumulates the text of that block
 
-  # scan each line in the body for our tags
-  while IFS= read -r line; do
-    if [[ "$line" =~ ^(added|updated|deleted):[[:space:]]*(.*)$ ]]; then
-      tag="${BASH_REMATCH[1]}"
-      desc="${BASH_REMATCH[2]}"
-      # uppercase first char of the tag for the Markdown header
-      section_header="### ${tag^}"
-      entry="- $desc ($hash)"
-      # insert right after the matching section in $file
-      sed -i "/^${section_header}\$/a $entry" "$file"
+  # walk through each line of the commit message
+  while IFS= read -r line || [[ -n $line ]]; do
+    # 1) if we're in a block and this line is indented, append it
+    if [[ -n $in_tag && $line =~ ^[[:space:]]+ ]]; then
+      block+=$'\n'"$line"
+      continue
     fi
-  done <<<"$body"
+
+    # 2) if we were in a block but this line is NOT indented, flush it now
+    if [[ -n $in_tag ]]; then
+      # flush the previous block
+      section_header="### ${in_tag^}"
+      # separate first line from any “rest”
+      first_line="${block%%$'\n'*}"
+      rest="${block#*$'\n'}"
+
+      # bullet + SHA
+      entry="- ${first_line} (${hash})"
+      sed -i "/^${section_header}\$/a ${entry}" "$file"
+
+      # any indented follow‐up lines
+      if [[ $rest != "$block" ]]; then
+        while IFS= read -r sub; do
+          sed -i "/^${section_header}\$/a   ${sub}" "$file"
+        done <<< "$rest"
+      fi
+
+      # reset for the next block
+      in_tag=""
+      block=""
+    fi
+
+    # 3) check for a new “added: …” / “updated: …” / “deleted: …”
+    if [[ $line =~ ^(added|updated|deleted):[[:space:]]*(.*)$ ]]; then
+      in_tag="${BASH_REMATCH[1]}"
+      block="${BASH_REMATCH[2]}"
+    fi
+  done <<< "$body"
+
+  # 4) if the message ended while we were in a block, flush it
+  if [[ -n $in_tag ]]; then
+    section_header="### ${in_tag^}"
+    first_line="${block%%$'\n'*}"
+    rest="${block#*$'\n'}"
+    entry="- ${first_line} (${hash})"
+    sed -i "/^${section_header}\$/a ${entry}" "$file"
+    if [[ $rest != "$block" ]]; then
+      while IFS= read -r sub; do
+        sed -i "/^${section_header}\$/a   ${sub}" "$file"
+      done <<< "$rest"
+    fi
+  fi
+
 done
