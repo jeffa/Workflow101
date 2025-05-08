@@ -21,3 +21,9 @@ v0.1
         * The `.github/workflows/release-notes.yml` workflow (trigger, permissions, and step-by-step behavior).
         * The `scripts/update_release_notes.sh` script (initialization, log parsing, entry insertion).
         * How to use the workflow via commit-message conventions.
+v0.2
+    Explanation of the key change:
+
+    1.  We collect **all** lines that need to go under a header into a temporary file (`$tmp`) in the exact order we want them.
+    2.  `sed -i "/^### Added\$/r $tmp" file` will append the _entire_ contents of `$tmp` **immediately below** the line matching `### Added`, preserving order.
+    3.  No more juggling of `a` versus `i`, no more multiple passes that reverse your indent-lines.
