@@ -79,7 +79,7 @@ while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
     sed -i "/^${section_header}\$/a ${entry}" "$file"
     if [[ $rest != "$block" ]]; then
       while IFS= read -r sub; do
-        sed -i "/^${section_header}\$/i   ${sub}" "$file"
+        sed -i "/^${section_header}\$/a   ${sub}" "$file"
       done <<< "$rest"
     fi
   fi
