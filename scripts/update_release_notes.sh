@@ -28,7 +28,7 @@ fi
 
 git --no-pager log --format=$'%h%x00%B%x00' "$before..$after" |
 while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
-  in_tag=""        # holds “added” or “updated” or “deleted” once we see it
+  in_tag=""        # will hold “added” or “updated” or “deleted”
   block=""         # accumulates the text of that block
 
   # walk through each line of the commit message
@@ -41,24 +41,27 @@ while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
 
     # 2) if we were in a block but this line is NOT indented, flush it now
     if [[ -n $in_tag ]]; then
-      # flush the previous block
       section_header="### ${in_tag^}"
-      # separate first line from any “rest”
       first_line="${block%%$'\n'*}"
       rest="${block#*$'\n'}"
 
-      # bullet + SHA
-      entry="- ${first_line} (${hash})"
-      sed -i "/^${section_header}\$/a ${entry}" "$file"
+      # build a tiny “insert” file
+      tmp=$(mktemp)
+      {
+        # the bullet + SHA
+        echo "- ${first_line} (${hash})"
+        # and any indented follow‐up lines
+        if [[ $rest != "$block" ]]; then
+          while IFS= read -r sub; do
+            echo "   ${sub}"
+          done <<< "$rest"
+        fi
+      } > "$tmp"
 
-      # any indented follow‐up lines
-      if [[ $rest != "$block" ]]; then
-        while IFS= read -r sub; do
-          sed -i "/^${section_header}\$/i   ${sub}" "$file"
-        done <<< "$rest"
-      fi
+      # now append the whole thing _below_ the header in one shot
+      sed -i "/^${section_header}\$/r $tmp" "$file"
+      rm -f "$tmp"
 
-      # reset for the next block
       in_tag=""
       block=""
     fi
@@ -70,18 +73,24 @@ while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
     fi
   done <<< "$body"
 
-  # 4) if the message ended while we were in a block, flush it
+  # 4) if the message ended while we were in a block, flush it as well
   if [[ -n $in_tag ]]; then
     section_header="### ${in_tag^}"
     first_line="${block%%$'\n'*}"
     rest="${block#*$'\n'}"
-    entry="- ${first_line} (${hash})"
-    sed -i "/^${section_header}\$/a ${entry}" "$file"
-    if [[ $rest != "$block" ]]; then
-      while IFS= read -r sub; do
-        sed -i "/^${section_header}\$/a   ${sub}" "$file"
-      done <<< "$rest"
-    fi
+
+    tmp=$(mktemp)
+    {
+      echo "- ${first_line} (${hash})"
+      if [[ $rest != "$block" ]]; then
+        while IFS= read -r sub; do
+          echo "   ${sub}"
+        done <<< "$rest"
+      fi
+    } > "$tmp"
+
+    sed -i "/^${section_header}\$/r $tmp" "$file"
+    rm -f "$tmp"
   fi
 
 done
