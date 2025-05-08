@@ -49,7 +49,7 @@ while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
 
       # bullet + SHA
       entry="- ${first_line} (${hash})"
-      sed -i "/^${section_header}\$/a ${entry}" "$file"
+      sed -i "/^${section_header}\$/i ${entry}" "$file"
 
       # any indented follow‐up lines
       if [[ $rest != "$block" ]]; then
@@ -76,7 +76,7 @@ while IFS= read -r -d '' hash && IFS= read -r -d '' body; do
     first_line="${block%%$'\n'*}"
     rest="${block#*$'\n'}"
     entry="- ${first_line} (${hash})"
-    sed -i "/^${section_header}\$/i ${entry}" "$file"
+    sed -i "/^${section_header}\$/a ${entry}" "$file"
     if [[ $rest != "$block" ]]; then
       while IFS= read -r sub; do
         sed -i "/^${section_header}\$/i   ${sub}" "$file"
