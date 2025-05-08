@@ -12,7 +12,11 @@ another
 leads
 to
 another
+leads
+to
+another
 ### Added
+- one thing (11d91e0)
 another
 to
 leads
@@ -27,7 +31,10 @@ baz
 - foo (b7158c0)
 bar
 baz
+bar
+baz
 ### Updated
+- foo (11d91e0)
 baz
 bar
 - foo (0ba9843)
@@ -39,7 +46,9 @@ not
 that
 - not this (b7158c0)
 and
+and
 ### Deleted
+- not this (11d91e0)
 and
 - not this (0ba9843)
 - another bar (e2a5be0)
