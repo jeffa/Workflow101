@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 leads
 to
 another
+- one thing (b7158c0)
+leads
+to
+another
 ### Added
 another
 to
@@ -20,6 +24,9 @@ leads
 - foo (5c43660)
 bar
 baz
+- foo (b7158c0)
+bar
+baz
 ### Updated
 baz
 bar
@@ -30,6 +37,8 @@ bar
 and
 not
 that
+- not this (b7158c0)
+and
 ### Deleted
 and
 - not this (0ba9843)
