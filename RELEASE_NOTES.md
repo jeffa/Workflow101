@@ -4,20 +4,20 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+-  (f17df1c)
 - foo
 - bar
 - baz
-### Added
--  (f17df1c)
 
+### Updated
+-  (f17df1c)
 - one
 - two
 - three
-### Updated
--  (f17df1c)
 
+### Deleted
+-  (f17df1c)
 - this
 - and
 - that
-### Deleted
--  (f17df1c)
